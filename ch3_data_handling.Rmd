@@ -1,0 +1,43 @@
+---
+title: "ch3_data_handling"
+output: html_document
+date: "2023-02-01"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+
+
+```
+
+## Tidyverse 
+
+```{r, eval=F}
+dat <- read_csv("Example_data/Ch3_chb.csv") 
+dat1 <- dat #원본 보존
+```
+
+```{r}
+dat1 %>% 
+  select(id, b_alt, b_bil, b_alb) %>% 
+  print(n=4)
+
+dat1 %>% 
+  select(-id, -index_date) %>% 
+  colnames()
+
+dat1 %>% 
+  select(b_alt, m6_alt, m12_alt) %>% 
+  print(n=4)
+
+dat1 %>% 
+  select(contains('m6')) %>% 
+  print(n=4)
+
+dat1 %>% 
+  rename(sex=gender) %>% 
+  print(n=4)
+```
+
