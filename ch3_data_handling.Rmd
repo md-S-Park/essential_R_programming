@@ -41,3 +41,27 @@ dat1 %>%
   print(n=4)
 ```
 
+```{r}
+dat1 %>% 
+  mutate(age_gr=ifelse(age>=50, 'above_50', 'below_50')) %>% 
+  count(age_gr)
+```
+
+```{r}
+dat1 %>% 
+  mutate(bil_gr=ifelse(b_bil>=3, 'C', 
+                       ifelse(b_bil>=2, 'B', 'A'))) %>% 
+  select(id, b_bil, bil_gr) %>% 
+  print(n=20) %>% 
+  count(bil_gr)
+```
+
+```{r}
+dat1 %>% 
+  mutate(risk_gr=ifelse(age>=50 & lc==1, 'high_risk',
+                        ifelse(age<50 & lc==0,'low_risk', 'intermediate_risk'))) %>% 
+  count(risk_gr)
+```
+
+
+
