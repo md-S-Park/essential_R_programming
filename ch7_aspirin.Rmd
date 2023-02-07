@@ -1,0 +1,72 @@
+---
+title: "ch7_aspirin_cca"
+output: html_document
+date: "2023-02-07"
+---
+
+
+1. 셋팅하기
+```{r}
+library(tidyverse) #필
+library(gtsummary) #필
+library(moonBook) #필
+
+dat <- read_csv("G:\\내 드라이브\\dev\\essential_R_programming\\Example_data\\Ch7_aspirin.csv")
+dat1 <- dat
+dim(dat1)
+
+names(dat1) <- tolower(names(dat1)) #필: 소문자로 바꿔주기
+names(dat1)
+glimpse(dat1) #필: 데이터 구조 파악
+
+```
+
+2. 결측값 확인하기
+```{r}
+colSums(is.na(dat1))
+```
+
+3. 자료형태 변환하기
+```{r}
+dat1 <- dat1 %>% 
+  select(id, age, everything())
+colnames(dat1)
+
+dat1 <- dat1 %>% 
+  mutate_at(vars(group:smoking), as.factor)
+sapply(dat1, class)  
+
+
+#변수에 라벨
+dat1$id <- factor(dat1$id)
+dat1$group <- factor(dat1$group, 
+                     labels=c('control', 'case'))
+dat1$gender <- factor(dat1$gender,
+                      labels=c('male','female'))
+dat1$racegroup <- factor(dat1$racegroup,
+                         labels = c('white', 'black', 'asian'))
+dat1$location <-  factor(dat1$location,
+                         labels = c('iCCA', 'pCCA', 'dCCA'))
+dat1$obesity <- factor(dat1$obesity,
+                       labels = c('normal', 'obesity', 'unknown'))
+dat1$aspirin <- factor(dat1$aspirin,
+                       labels = c('non-user', 'aspirin-user'))
+dat1$frequency <- factor(dat1$frequency,
+                         labels = c('non-user', 'non-daily user', 'daily user'))
+dat1$duration <-  factor(dat1$duration,
+                         labels = c('non-user', '<3years', '\U2265 3years', 'unknown'))
+dat1$dose <- factor(dat1$dose,
+                    labels = c('non-user', '81-162mg/day', '\U2265 325mg/day', 'unknown'))
+dat1 <- dat1 %>% 
+  mutate_at(vars(cva:smoking), ~ifelse(.==1, 'present', 'none')) %>% 
+  mutate_at(vars(cva:smoking), as.factor)
+
+dat1 <- dat1 %>% 
+  mutate(age_gr = cut(age, 
+                      c(-Inf, 40, 50, 60, 70, Inf),
+                      c('<40', '40-49', '50-59', '60-69', '\U2265 70')))
+dat1 %>% 
+  count(age_gr)
+```
+
+
